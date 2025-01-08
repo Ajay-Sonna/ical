@@ -1,101 +1,147 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Navbar from "@/Components/Navbar/page";
+import { IndianRupee,Calendar } from "lucide-react";
+
+// Assuming we have a Borrower interface as in your previous code
+interface Borrower {
+  id: number;
+  name: string;
+  loanAmount: number;
+  interestRate: number; // Annual interest rate
+  dueDate: string; // Loan issue date
+  status: string;
+}
+
+function Home() {
+  const [borrowers, setBorrowers] = useState<Borrower[]>([]);
+  const [totalLoanAmount, setTotalLoanAmount] = useState(0);
+  const [outstandingBalance, setOutstandingBalance] = useState(0);
+  const [nearestDue, setNearestDue] = useState<Borrower | null>(null);
+
+  useEffect(() => {
+    // Fetch borrowers from your API (or mock data)
+    axios
+      .get("http://localhost:3001/borrowers")
+      .then((response) => {
+        const borrowerData =  response.data.map((borrower: any)=>({...borrower, loanAmount:Number(borrower.loanAmount)}));//response.data.map((borrower: any) => ({ ...borrower,loanAmount: Number(borrower.loanAmount)
+        setBorrowers(borrowerData);
+
+        // Calculate Total Loan Amount for pending loans only
+        const totalLoan = borrowerData
+          .filter((borrower: Borrower) => borrower.status === "pending")
+          .reduce((acc: number, borrower: Borrower) => acc + borrower.loanAmount, 0);
+        setTotalLoanAmount(totalLoan);
+
+        // Calculate Outstanding Balance (Total interest for pending loans)
+        const outstanding = borrowerData
+          .filter((borrower: Borrower) => borrower.status === "pending")
+          .reduce((acc: number, borrower: Borrower) => {
+            // Calculate months elapsed
+            const totalMonths =
+              (new Date().getFullYear() - new Date(borrower.dueDate).getFullYear()) * 12 +
+              (new Date().getMonth() - new Date(borrower.dueDate).getMonth());
+            // Calculate simple interest: SI = P * T * R / 100
+            const si = (borrower.loanAmount * totalMonths * borrower.interestRate) / 100;
+            return acc + si;
+          }, 0);
+
+        setOutstandingBalance(outstanding);
+
+        // Find the nearest due date (pending loans)
+        const sortedBorrowers = borrowerData
+          .filter((borrower: Borrower) => borrower.status === "pending" && new Date(borrower.dueDate) > new Date())
+          .sort((a: Borrower, b: Borrower) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
+
+        setNearestDue(sortedBorrowers[0] || null);
+      })
+      .catch((error) => console.error("Error fetching borrowers:", error));
+  }, []);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="">
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* <Navbar/> */}
+      {/* Hero Section */}
+      <section className="text-white text-center py-10">
+        <h2 className="text-4xl font-bold mb-4 font-serif">Manage Your Loans Effortlessly!</h2>
+        <p className="text-lg font-serif">Track, manage, and receive your loans with ease.</p>
+        <button className="mt-6 font-serif bg-black text-white px-6 py-3 rounded shadow hover:bg-white hover:text-black">
+          View Details
+        </button>
+      </section>
+
+      {/* Loan Overview Section */}
+      <section className="relative py-8 px-6 rounded-md">
+        <h3 className="text-xl font-bold mb-6 text-white font-serif">Loan Overview</h3>
+        <div className="grid md:grid-cols-3 gap-6">
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20  hover:bg-white/20 transition-colors">
+            <h4 className="text-lg font-bold font-serif inline-flex space-x-1 items-center"><span><IndianRupee/></span>Total Loan Amount</h4>
+            <p className="text-3xl text-white mt-4 font-serif">₹{totalLoanAmount}</p>
+          </div>
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20  hover:bg-white/20 transition-colors">
+            <h4 className="text-lg font-bold font-serif inline-flex space-x-1 items-center"><span><IndianRupee/></span>Outstanding Interest</h4>
+            <p className="text-3xl text-white mt-4 font-serif">₹{outstandingBalance.toFixed(2)}</p>
+          </div>
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 hover:bg-white/20 transition-colors">
+            <h4 className="text-lg font-bold  font-serif inline-flex space-x-1 items-center"><span><Calendar/></span>Next Due Date</h4>
+            <p className="text-xl mt-4 font-serif text-white">
+              {nearestDue ? nearestDue.dueDate : "No pending dues"}
+            </p>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      {/* Upcoming Dues Section */}
+      <section className=" bg-indigo-950/50 backdrop-blur-sm rounded-xl p-6 border border-indigo-800/50">
+        <h3 className="text-xl font-bold mb-6 text-white font-serif">Upcoming Dues</h3>
+        <div className="overflow-x-auto  shadow rounded-lg border border-yellow-300">
+          <table className="min-w-full border-collapse">
+            <thead className="px-6 py-3 text-left text-sm font-semibold text-indigo-900">
+              <tr className="bg-yellow-300 text-black text-center font-serif">
+                <th className="px-6 py-3">Loan Name</th>
+                <th className="px-6 py-3">Due Date</th>
+                <th className="px-6 py-3">Amount Due</th>
+                <th className="px-6 py-3">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-indigo-800">
+              {borrowers
+                .filter((borrower) => borrower.status === "pending" && new Date(borrower.dueDate) > new Date())
+                .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
+                .map((borrower) => (
+                  <tr key={borrower.id} className="border-b text-center text-white  font-serif bg-white/5 hover:bg-white/10 transition-colors">
+                    <td className="px-6 py-3 ">{borrower.name}</td>
+                    <td className="px-6 py-3">{borrower.dueDate}</td>
+                    <td className="px-6 py-3">₹{borrower.loanAmount}</td>
+                    <td className="px-6 py-3">
+                      <button className="px-1 py-2 bg-red-400/10 text-red-400 rounded-lg">Pending</button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      
     </div>
   );
 }
+
+export default Home;
+
+// import React, { Children } from 'react';
+// import Home from './Home/page';
+
+// function page() {
+//   return (
+//     <div>
+//       <Home/>
+//     </div>
+//   )
+// }
+
+// export default page

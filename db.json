@@ -1,0 +1,154 @@
+{
+  "borrowers": [
+    {
+      "id": "5f5ebf05-bbb3-4cb8-b738-116b24cba895",
+      "name": "Likhith",
+      "loanAmount": "100000",
+      "interestRate": "2",
+      "dueDate": "2024-12-12",
+      "reminder": "3",
+      "interest": "",
+      "status": "paid"
+    },
+    {
+      "id": "b085bc59-921e-4f52-a0e8-f7f99cb87662",
+      "name": "Raju",
+      "loanAmount": "50000",
+      "interestRate": "2",
+      "dueDate": "2024-12-12",
+      "reminder": "12",
+      "interest": "",
+      "status": "paid"
+    },
+    {
+      "id": "a7e6df25-b31e-4159-b3f3-ae3656889eaf",
+      "name": "Vijay",
+      "loanAmount": "100000",
+      "interestRate": "5",
+      "dueDate": "2024-12-13",
+      "reminder": "8",
+      "interest": "",
+      "status": "paid"
+    },
+    {
+      "id": "50d55a3d-aa70-4c82-8bc7-01776438cc63",
+      "name": "Ramesh",
+      "loanAmount": "100000",
+      "interestRate": "0",
+      "dueDate": "2024-12-28",
+      "reminder": "5",
+      "interest": "",
+      "status": "paid"
+    },
+    {
+      "id": "d3abde72-024e-4c61-87f0-36b5dd2b5393",
+      "name": "Ram",
+      "loanAmount": "100000",
+      "interestRate": "5",
+      "dueDate": "2024-12-13",
+      "reminder": "1",
+      "interest": "",
+      "status": "paid"
+    },
+    {
+      "id": "3bd26571-1b9c-4432-ae17-40ab49a89507",
+      "name": "Vijay Antony",
+      "loanAmount": "300000",
+      "interestRate": "2",
+      "dueDate": "2024-12-26",
+      "reminder": "10",
+      "interest": "",
+      "status": "paid"
+    },
+    {
+      "id": "fbcd6f8f-6947-4cf8-a9eb-d6567b49aab6",
+      "name": "Mahesh",
+      "loanAmount": "100000",
+      "interestRate": "2",
+      "dueDate": "2023-11-13",
+      "reminder": "12",
+      "interest": "",
+      "status": "paid"
+    },
+    {
+      "id": "be240cd9-3119-4091-99f2-5b10648dac01",
+      "name": "Kalyan",
+      "loanAmount": "100000",
+      "interestRate": "2",
+      "dueDate": "2022-12-13",
+      "reminder": "6",
+      "interest": "",
+      "status": "paid"
+    },
+    {
+      "id": "c5cbe568-1779-4117-acc8-4526e4378a91",
+      "name": "Charan",
+      "loanAmount": "100000",
+      "interestRate": "2",
+      "dueDate": "2022-12-13",
+      "reminder": "12",
+      "interest": "",
+      "status": "pending"
+    },
+    {
+      "id": "14088f8a-e14d-4bd5-a96a-b9266af7fbe8",
+      "name": "Bala",
+      "loanAmount": "100000",
+      "interestRate": "2",
+      "dueDate": "2024-08-13",
+      "reminder": "12",
+      "interest": "",
+      "status": "pending"
+    },
+    {
+      "id": "6b483f65-a116-4a5d-b759-14afa247fa8d",
+      "name": "Nithin",
+      "loanAmount": "100000",
+      "interestRate": "2",
+      "dueDate": "2024-06-13",
+      "reminder": "1",
+      "interest": "",
+      "status": "pending"
+    },
+    {
+      "id": "1515b4f3-264e-4395-8a14-df7822362d5d",
+      "name": "NTR",
+      "loanAmount": "100000",
+      "interestRate": "2",
+      "dueDate": "2023-12-13",
+      "reminder": "1",
+      "interest": "",
+      "status": "pending"
+    },
+    {
+      "id": "9fb61368-c2b5-40c1-a825-337b9bda96e9",
+      "name": "Sushanth",
+      "loanAmount": "100000",
+      "interestRate": "2",
+      "dueDate": "2022-12-13",
+      "reminder": "12",
+      "interest": "",
+      "status": "pending"
+    },
+    {
+      "id": "7c81881f-b136-4f12-a7fa-fadbf3dea3fd",
+      "name": "Arjun",
+      "loanAmount": "100000",
+      "interestRate": "2",
+      "dueDate": "2023-12-13",
+      "reminder": "2",
+      "interest": "",
+      "status": "pending"
+    },
+    {
+      "id": "1b47739c-71a7-4e7e-b1e1-e4f4b566923d",
+      "name": "Rudransh",
+      "loanAmount": "100000",
+      "interestRate": "2",
+      "dueDate": "2024-11-13",
+      "reminder": "4",
+      "interest": "",
+      "status": "pending"
+    }
+  ]
+}
